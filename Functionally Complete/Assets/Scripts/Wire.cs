@@ -9,12 +9,13 @@ public class Wire : MonoBehaviour
 
     [SerializeField] private Material offMat;
     [SerializeField] private Material onMat;
-    [SerializeField] private LineRenderer ln;
+    [SerializeField] private Material selectedMat;
+    [SerializeField] private LineRenderer wireRenderer;
 
     public void DrawWire()
     {
-        ln.SetPosition(0, this.outputNode.transform.position);
-        ln.SetPosition(1, this.inputNode.transform.position);
+        this.wireRenderer.SetPosition(0, this.outputNode.transform.position);
+        this.wireRenderer.SetPosition(1, this.inputNode.transform.position);
     }
 
     public void CreateWire(OutputNode oN, InputNode iN)
@@ -35,17 +36,17 @@ public class Wire : MonoBehaviour
         iN.SetWire(this);
 
         // draw the wire
-        ln.positionCount = 2;
-        DrawWire();
+        this.wireRenderer.positionCount = 2;
+        this.DrawWire();
 
         // pass on the signal
-        PassSignal();
+        this.PassSignal();
     }
 
     public void PassSignal()
     {
         this.inputNode.SetState(outputNode.GetState());
-        ln.material = this.outputNode.GetState() ? onMat : offMat;
+        this.wireRenderer.material = this.outputNode.GetState() ? onMat : offMat;
     }
 
     public void DeleteWire()
@@ -54,5 +55,19 @@ public class Wire : MonoBehaviour
         this.inputNode.SetState(false);
         this.inputNode.SetWire(null);
         Destroy(gameObject);
+    }
+
+    public void HighlightWire(bool state)
+    {
+        int layerNum = state ? 0 : 6;
+        gameObject.layer = layerNum;
+        if (state)
+        {
+            this.wireRenderer.material = selectedMat;
+        }
+        else
+        {
+            this.wireRenderer.material = this.outputNode.GetState() ? onMat : offMat;
+        }
     }
 }

@@ -38,4 +38,5 @@ public abstract class LogicNode : MonoBehaviour
     // delete wires on both
     public abstract void DeleteWires();
     public abstract void ReDrawWires();
+    public abstract void HighlightWires(bool state);
 }

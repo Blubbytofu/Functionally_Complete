@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3623871282945497072}
   - component: {fileID: 3623871282945497073}
   - component: {fileID: 3623871282945497087}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Wire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &3623871282945497073
 LineRenderer:
@@ -124,7 +124,7 @@ LineRenderer:
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
-    numCapVertices: 0
+    numCapVertices: 2
     alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}
@@ -146,8 +146,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d59ba12adf6db441bcdbe372c506726, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oN: {fileID: 0}
-  iN: {fileID: 0}
+  outputNode: {fileID: 0}
+  inputNode: {fileID: 0}
   offMat: {fileID: 2100000, guid: 248e569b5de9f594ea80cf20804a9ffd, type: 2}
   onMat: {fileID: 2100000, guid: c8ec1c06e5912c144a0fdc89b0fc5bf3, type: 2}
-  ln: {fileID: 3623871282945497073}
+  selectedMat: {fileID: 2100000, guid: 6db6f542eefd3814fb0a3a580b3158f0, type: 2}
+  wireRenderer: {fileID: 3623871282945497073}

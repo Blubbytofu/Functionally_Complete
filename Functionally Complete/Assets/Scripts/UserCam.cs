@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UserCam : MonoBehaviour
 {
     public static UserCam instance { get; private set; }
     [SerializeField] private UserCanvas userCanvas;
+    [SerializeField] private DotGrid dotGrid;
     [SerializeField] private Camera userCam;
     [SerializeField] private Camera secondCam;
     [SerializeField] LineRenderer wireVis;
@@ -57,10 +59,8 @@ public class UserCam : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void Configure()
     {
-        Zoom();
-        
         // on Right Click down
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
@@ -81,6 +81,12 @@ public class UserCam : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void Update()
+    {
+        Zoom();
+        Configure();
 
         // on Left Click down
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -124,6 +130,7 @@ public class UserCam : MonoBehaviour
             if (logicComp != null)
             {
                 logicComp.SetLayer(true);
+                logicComp.HighlightWires(true);
                 leftClickState = LeftClickState.LOGIC_COMPONENT;
                 dragOrigin = userCam.ScreenToWorldPoint(Input.mousePosition);
                 dragOrigin -= clickedObj.transform.position;
@@ -136,6 +143,7 @@ public class UserCam : MonoBehaviour
             switch (leftClickState)
             {
                 case LeftClickState.PAN:
+                    dotGrid.UpdateGridPos();
                     Vector3 offset = userCam.ScreenToWorldPoint(Input.mousePosition) - dragOrigin;
                     userCam.transform.position -= offset;
                     break;
@@ -188,13 +196,16 @@ public class UserCam : MonoBehaviour
                     two = null;
                     break;
                 case LeftClickState.LOGIC_COMPONENT:
+                    LogicComponent logicComp = clickedObj.GetComponent<LogicComponent>();
+                    logicComp.HighlightWires(false);
+
                     DeSelectLogicComp();
 
                     // of mouse is over menu, destroy component
                     if (userCanvas.GetHudClick())
                     {
                         // first remove all connections
-                        clickedObj.GetComponent<LogicComponent>().DeleteComponent();
+                        logicComp.DeleteComponent();
                         // destroy
                         Destroy(clickedObj);
                     }
@@ -220,10 +231,11 @@ public class UserCam : MonoBehaviour
     {
         if (clickedObj != null)
         {
-            LogicComponent lc = clickedObj.GetComponent<LogicComponent>();
-            if (lc != null)
+            LogicComponent logicComp = clickedObj.GetComponent<LogicComponent>();
+            if (logicComp != null)
             {
-                lc.SetLayer(false);
+                logicComp.SetLayer(false);
+                logicComp.HighlightWires(false);
             }
         }
     }
@@ -245,7 +257,14 @@ public class UserCam : MonoBehaviour
         overrideHUDState = true;
 
         clickedObj = obj;
-        clickedObj.GetComponent<LogicComponent>().SetLayer(true);
+        LogicComponent logicComp = clickedObj.GetComponent<LogicComponent>();
+        logicComp.HighlightWires(true);
+        logicComp.SetLayer(true);
         dragOrigin = Vector3.zero;
+    }
+
+    public float GetMinZoom()
+    {
+        return minZoom;
     }
 }

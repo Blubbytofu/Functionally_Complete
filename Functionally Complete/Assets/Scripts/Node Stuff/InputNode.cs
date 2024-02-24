@@ -48,4 +48,12 @@ public class InputNode : LogicNode
     {
         this.ClearWires();
     }
+
+    public override void HighlightWires(bool state)
+    {
+        if (this.wire != null)
+        {
+            wire.HighlightWire(state);
+        }
+    }
 }

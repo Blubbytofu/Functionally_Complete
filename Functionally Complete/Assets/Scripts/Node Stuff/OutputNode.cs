@@ -76,4 +76,17 @@ public class OutputNode : LogicNode
             i--;
         }
     }
+
+    public override void HighlightWires(bool state)
+    {
+        if (this.wires.Count == 0)
+        {
+            return;
+        }
+
+        foreach (Wire w in wires)
+        {
+            w.HighlightWire(state);
+        }
+    }
 }
