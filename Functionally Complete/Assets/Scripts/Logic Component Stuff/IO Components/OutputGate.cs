@@ -11,14 +11,4 @@ public class OutputGate : LogicComponent
     {
         statusLight.ChangeMat(a.GetState());
     }
-
-    public override void ReDrawWires()
-    {
-        a.ReDrawWires();
-    }
-
-    public override void DeleteComponent()
-    {
-        a.DeleteWires();
-    }
 }

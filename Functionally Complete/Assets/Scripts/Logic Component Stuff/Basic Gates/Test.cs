@@ -2,22 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MUX2x1Gate : LogicComponent
+public class Test : LogicComponent
 {
     [SerializeField] private InputNode a;
     [SerializeField] private InputNode b;
-    [SerializeField] private InputNode s;
+    [SerializeField] private InputNode c;
     [SerializeField] private OutputNode y;
+
+
+    void Start()
+    {
+        Logic();
+    }
 
     public override void Logic()
     {
-        if (!s.GetState())
-        {
-            y.SetState(a.GetState());
-        }
-        else
-        {
-            y.SetState(b.GetState());
-        }
+        y.SetState(!a.GetState() || !b.GetState() || !c.GetState());
     }
 }

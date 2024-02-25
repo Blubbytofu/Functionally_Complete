@@ -9,15 +9,27 @@ public abstract class LogicComponent : MonoBehaviour
 
     private void Awake()
     {
-        SetLayer(false);
-        childrenNodes = GetAllChildNodes();
+        this.SetLayer(false);
+        this.GetAllChildNodes();
     }
 
     public abstract void Logic();
 
-    public abstract void ReDrawWires();
+    public void ReDrawWires()
+    {
+        foreach (LogicNode node in childrenNodes)
+        {
+            node.ReDrawWires();
+        }
+    }
 
-    public abstract void DeleteComponent();
+    public void DeleteComponent()
+    {
+        foreach (LogicNode node in childrenNodes)
+        {
+            node.DeleteWires();
+        }
+    }
 
     public void SetLayer(bool onState)
     {
@@ -47,15 +59,15 @@ public abstract class LogicComponent : MonoBehaviour
         }
     }
 
-    public LogicNode[] GetAllChildNodes()
+    public void GetAllChildNodes()
     {
         LogicNode[] nodeList = GetComponentsInChildren<LogicNode>();
-        return nodeList;
+        childrenNodes = nodeList;
     }
 }
 
 /* Things to fix:
- * add latches and flipflops
+ * output node sending signals in sequential order
  * add higher input gates
  * add 4 bit I/O
  * polish menu

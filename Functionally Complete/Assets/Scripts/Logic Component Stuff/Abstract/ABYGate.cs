@@ -9,18 +9,4 @@ public abstract class ABYGate : LogicComponent
     [SerializeField] protected OutputNode y;
 
     public override abstract void Logic();
-
-    public override void ReDrawWires()
-    {
-        a.ReDrawWires();
-        b.ReDrawWires();
-        y.ReDrawWires();
-    }
-
-    public override void DeleteComponent()
-    {
-        a.DeleteWires();
-        b.DeleteWires();
-        y.DeleteWires();
-    }
 }

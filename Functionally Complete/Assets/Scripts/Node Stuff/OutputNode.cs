@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class OutputNode : LogicNode
@@ -24,6 +25,7 @@ public class OutputNode : LogicNode
             return;
         }
 
+        //Parallel.ForEach(wires, w => { w.PassSignal(); });
         foreach (Wire w in wires)
         {
             w.PassSignal();

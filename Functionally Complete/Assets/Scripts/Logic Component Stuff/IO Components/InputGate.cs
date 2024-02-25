@@ -19,14 +19,4 @@ public class InputGate : LogicComponent, IConfigure
         y.SetState(state);
         statusLight.ChangeMat();
     }
-
-    public override void ReDrawWires()
-    {
-        y.ReDrawWires();
-    }
-
-    public override void DeleteComponent()
-    {
-        y.DeleteWires();
-    }
 }

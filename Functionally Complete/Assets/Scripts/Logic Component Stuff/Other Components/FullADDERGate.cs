@@ -29,22 +29,4 @@ public class FullADDERGate : LogicComponent
         sum.SetState(numInputsOn == 1 || numInputsOn == 3);
         cout.SetState(numInputsOn > 1);
     }
-
-    public override void ReDrawWires()
-    {
-        a.ReDrawWires();
-        b.ReDrawWires();
-        cin.ReDrawWires();
-        sum.ReDrawWires();
-        cout.ReDrawWires();
-    }
-
-    public override void DeleteComponent()
-    {
-        a.DeleteWires();
-        b.DeleteWires();
-        cin.DeleteWires();
-        sum.DeleteWires();
-        cout.DeleteWires();
-    }
 }

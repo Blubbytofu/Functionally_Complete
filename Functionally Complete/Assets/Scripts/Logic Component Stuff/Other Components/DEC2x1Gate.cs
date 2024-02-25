@@ -23,20 +23,4 @@ public class DEC2x1Gate : LogicComponent
             y1.SetState(sState);
         }
     }
-
-    public override void ReDrawWires()
-    {
-        en.ReDrawWires();
-        s.ReDrawWires();
-        y0.ReDrawWires();
-        y1.ReDrawWires();
-    }
-
-    public override void DeleteComponent()
-    {
-        en.DeleteWires();
-        s.DeleteWires();
-        y0.DeleteWires();
-        y1.DeleteWires();
-    }
 }
