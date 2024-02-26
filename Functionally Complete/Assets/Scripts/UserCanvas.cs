@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class UserCanvas : MonoBehaviour
 {
-    [SerializeField] private GraphicRaycaster raycaster;
+    [SerializeField] private GraphicRaycaster canvasRaycaster;
     private PointerEventData pointerData;
     [SerializeField] private GameObject[] menus;
 
@@ -26,7 +26,7 @@ public class UserCanvas : MonoBehaviour
         List<RaycastResult> results = new List<RaycastResult>();
         pointerData = new PointerEventData(EventSystem.current);
         pointerData.position = Input.mousePosition;
-        raycaster.Raycast(pointerData, results);
+        canvasRaycaster.Raycast(pointerData, results);
 
         if (results.Count > 0)
         {

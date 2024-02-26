@@ -1,28 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UserCam : MonoBehaviour
 {
+    // singleton behavior
     public static UserCam instance { get; private set; }
+
     [SerializeField] private UserCanvas userCanvas;
     [SerializeField] private DotGrid dotGrid;
-    [SerializeField] private Camera userCam;
-    [SerializeField] private Camera secondCam;
+    [SerializeField] private Camera userCam, secondCam;
     [SerializeField] LineRenderer wireVis;
+
+    // wire prefab
     [SerializeField] private GameObject wire;
 
     [SerializeField] private float zoomStep, maxZoom, minZoom;
-    private Vector3 dragOrigin;
-    private GameObject clickedObj;
-    private GameObject releasedObj;
 
-    private LogicNode one;
-    private LogicNode two;
+    private Vector3 dragOrigin;
+    private GameObject clickedObj, releasedObj;
+    private bool overrideHUDState;
+
+    private LogicNode nodeOne, nodeTwo;
 
     private LeftClickState leftClickState = LeftClickState.PAN;
-    private bool overrideHUDState;
 
     private enum LeftClickState
     {
@@ -34,6 +35,7 @@ public class UserCam : MonoBehaviour
 
     private void Awake()
     {
+        // check singleton
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -88,7 +90,7 @@ public class UserCam : MonoBehaviour
         Zoom();
         Configure();
 
-        // on Left Click down
+        // on Left Click down //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             // if click on hud
@@ -117,8 +119,8 @@ public class UserCam : MonoBehaviour
                 leftClickState = LeftClickState.LOGIC_NODE;
                 wireVis.positionCount = 2;
                 logicNode.ClearWires();
-                one = logicNode;
-                Vector3 wireOnePos = one.transform.position;
+                nodeOne = logicNode;
+                Vector3 wireOnePos = nodeOne.transform.position;
                 wireOnePos.z = 0;
                 wireVis.SetPosition(0, wireOnePos);
                 wireVis.SetPosition(1, wireOnePos);
@@ -137,7 +139,7 @@ public class UserCam : MonoBehaviour
             }
         }
 
-        // on hold Left Click
+        // on hold Left Click //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (Input.GetKey(KeyCode.Mouse0))
         {
             switch (leftClickState)
@@ -166,34 +168,33 @@ public class UserCam : MonoBehaviour
             }
         }
 
-        // on let go Left Click
+        // on let go Left Click //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             switch (leftClickState)
             {
                 case LeftClickState.LOGIC_NODE:
                     releasedObj = GetSelected();
+                    // insane nesting
                     if (releasedObj != null && releasedObj.GetComponent<LogicNode>() != null)
                     {
-                        two = releasedObj.GetComponent<LogicNode>();
-                        if (two.GetParentComponent() != one.GetParentComponent())
+                        nodeTwo = releasedObj.GetComponent<LogicNode>();
+                        if (nodeTwo.GetParentComponent() != nodeOne.GetParentComponent())
                         {
-                            if (two.GetIOType() == 'O' && one.GetIOType() == 'I')
+                            if (nodeTwo.GetIOType() == 'O' && nodeOne.GetIOType() == 'I')
                             {
                                 Wire w = Instantiate(wire, Vector3.zero, Quaternion.identity).GetComponent<Wire>();
-                                w.CreateWire(two.GetComponent<OutputNode>(), one.GetComponent<InputNode>());
+                                w.CreateWire(nodeTwo.GetComponent<OutputNode>(), nodeOne.GetComponent<InputNode>());
                             }
-                            else if (one.GetIOType() == 'O' && two.GetIOType() == 'I')
+                            else if (nodeOne.GetIOType() == 'O' && nodeTwo.GetIOType() == 'I')
                             {
                                 Wire w = Instantiate(wire, Vector3.zero, Quaternion.identity).GetComponent<Wire>();
-                                w.CreateWire(one.GetComponent<OutputNode>(), two.GetComponent<InputNode>());
+                                w.CreateWire(nodeOne.GetComponent<OutputNode>(), nodeTwo.GetComponent<InputNode>());
                             }
                         }
                     }
                     // end wire indicator
-                    wireVis.positionCount = 0;
-                    one = null;
-                    two = null;
+                    ResetWireVis();
                     break;
                 case LeftClickState.LOGIC_COMPONENT:
                     LogicComponent logicComp = clickedObj.GetComponent<LogicComponent>();
@@ -246,14 +247,20 @@ public class UserCam : MonoBehaviour
         {
             // on lose focus deselect selected comp and reset wire vis
             DeSelectLogicComp();
-            wireVis.positionCount = 0;
-            one = null;
-            two = null;
+            ResetWireVis();
         }
+    }
+
+    private void ResetWireVis()
+    {
+        wireVis.positionCount = 0;
+        nodeOne = null;
+        nodeTwo = null;
     }
 
     public void ForceHoldLogicComponent(GameObject obj)
     {
+        // important //
         overrideHUDState = true;
 
         clickedObj = obj;

@@ -41,8 +41,10 @@ public class Wire : MonoBehaviour
 
         // pass on the signal
         this.PassSignal();
+        this.inputNode.GetParentComponent().Logic();
     }
 
+    //public void PassSignal()
     public void PassSignal()
     {
         this.inputNode.SetState(outputNode.GetState());
@@ -53,6 +55,7 @@ public class Wire : MonoBehaviour
     {
         this.outputNode.RemoveWire(this);
         this.inputNode.SetState(false);
+        this.inputNode.GetParentComponent().Logic();
         this.inputNode.SetWire(null);
         Destroy(gameObject);
     }
@@ -69,5 +72,10 @@ public class Wire : MonoBehaviour
         {
             this.wireRenderer.material = this.outputNode.GetState() ? onMat : offMat;
         }
+    }
+
+    public InputNode GetInputNode()
+    {
+        return this.inputNode;
     }
 }

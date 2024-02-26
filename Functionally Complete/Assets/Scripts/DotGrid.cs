@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class DotGrid : MonoBehaviour
 {
-    [SerializeField] private float spacing;
     [SerializeField] private GameObject dot;
     public Camera cam;
 
@@ -53,16 +52,16 @@ public class DotGrid : MonoBehaviour
 
         float firstX = dotPos.x;
 
-        for (int j = 0; j < minPossibleY; j += (int)(spacing / 2))
+        for (int j = 0; j < minPossibleY; j += 1)
         {
-            for (int i = 0; i < minPossibleX; i += (int)(spacing / 2))
+            for (int i = 0; i < minPossibleX; i += 1)
             {
                 GameObject obj = Instantiate(dot, dotPos, Quaternion.identity);
                 obj.transform.SetParent(transform);
-                dotPos.x += spacing;
+                dotPos.x += 2;
             }
             dotPos.x = firstX;
-            dotPos.y += spacing;
+            dotPos.y += 2;
         }
     }
 }

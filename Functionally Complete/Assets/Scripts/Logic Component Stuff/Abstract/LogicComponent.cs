@@ -67,7 +67,6 @@ public abstract class LogicComponent : MonoBehaviour
 }
 
 /* Things to fix:
- * output node sending signals in sequential order
  * add higher input gates
  * add 4 bit I/O
  * polish menu

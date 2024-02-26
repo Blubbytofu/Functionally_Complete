@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class OutputNode : LogicNode
@@ -25,10 +24,23 @@ public class OutputNode : LogicNode
             return;
         }
 
-        //Parallel.ForEach(wires, w => { w.PassSignal(); });
+        List<LogicComponent> comps = new List<LogicComponent>();
+        // first sends output signal to all input nodes
+        // and tracks each unique logic component
         foreach (Wire w in wires)
         {
+            LogicComponent logicComp = w.GetInputNode().GetParentComponent();
+            if (!comps.Contains(logicComp))
+            {
+                comps.Add(logicComp);
+            }
             w.PassSignal();
+        }
+
+        // then triggers logic on each logic component
+        foreach(LogicComponent comp in comps)
+        {
+            comp.Logic();
         }
     }
 

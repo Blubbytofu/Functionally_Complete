@@ -9,7 +9,7 @@ public class InputNode : LogicNode
     public void SetState(bool newState)
     {
         this.state = newState;
-        parentLogicComp.Logic();
+        //parentLogicComp.Logic();
         SetMat();
     }
 
