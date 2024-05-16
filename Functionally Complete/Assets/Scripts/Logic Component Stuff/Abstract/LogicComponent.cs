@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class LogicComponent : MonoBehaviour
@@ -67,6 +65,7 @@ public abstract class LogicComponent : MonoBehaviour
 }
 
 /* Things to fix:
+ * optimize clock code
  * add higher input gates
  * add 4 bit I/O
  * polish menu

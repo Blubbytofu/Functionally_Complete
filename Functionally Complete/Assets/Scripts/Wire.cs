@@ -44,10 +44,16 @@ public class Wire : MonoBehaviour
         this.inputNode.GetParentComponent().Logic();
     }
 
-    //public void PassSignal()
     public void PassSignal()
     {
-        this.inputNode.SetState(outputNode.GetState());
+        if (inputNode.GetComponent<ClockNode>() != null)
+        {
+            this.inputNode.GetComponent<ClockNode>().SetState(outputNode.GetState());
+        }
+        else
+        {
+            this.inputNode.SetState(outputNode.GetState());
+        }
         this.wireRenderer.material = this.outputNode.GetState() ? onMat : offMat;
     }
 

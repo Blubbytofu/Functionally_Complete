@@ -1,15 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DFlipFlopGate : LogicComponent
+public class DFlipFlopGate : LogicComponent, IClock
 {
     [SerializeField] private InputNode d;
-    [SerializeField] private InputNode clk;
+    [SerializeField] private ClockNode clk;
     [SerializeField] private OutputNode q;
     [SerializeField] private OutputNode qBar;
-
-    private bool logicPause;
 
     private void Start()
     {
@@ -18,14 +15,20 @@ public class DFlipFlopGate : LogicComponent
 
     public override void Logic()
     {
-        if (!clk.GetState() || logicPause)
-        {
-            logicPause = false;
-            return;
-        }
+        // blank
+    }
 
-        q.SetState(d.GetState());
-        qBar.SetState(!q.GetState());
-        logicPause = true;
+    public void OnClock(bool edge)
+    {
+        if (edge)
+        {
+            q.SetState(d.GetState());
+            qBar.SetState(!q.GetState());
+        }
+    }
+
+    public ClockNode GetClkNode()
+    {
+        return this.clk;
     }
 }

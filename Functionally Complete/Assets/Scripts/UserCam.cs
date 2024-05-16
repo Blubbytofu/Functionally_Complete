@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UserCam : MonoBehaviour
@@ -48,13 +46,13 @@ public class UserCam : MonoBehaviour
 
     private void Zoom()
     {
-        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0 && userCam.orthographicSize > maxZoom)
+        if ((Input.GetAxisRaw("Mouse ScrollWheel") > 0 || Input.GetKeyDown(KeyCode.UpArrow)) && userCam.orthographicSize > maxZoom)
         {
             userCam.orthographicSize -= zoomStep;
             secondCam.orthographicSize = userCam.orthographicSize;
         }
 
-        if (Input.GetAxisRaw("Mouse ScrollWheel") < 0 && userCam.orthographicSize < minZoom)
+        if ((Input.GetAxisRaw("Mouse ScrollWheel") < 0 || Input.GetKeyDown(KeyCode.DownArrow)) && userCam.orthographicSize < minZoom)
         {
             userCam.orthographicSize += zoomStep;
             secondCam.orthographicSize = userCam.orthographicSize;

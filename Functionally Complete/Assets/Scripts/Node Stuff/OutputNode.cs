@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class OutputNode : LogicNode
@@ -34,11 +35,12 @@ public class OutputNode : LogicNode
             {
                 comps.Add(logicComp);
             }
+
             w.PassSignal();
         }
 
         // then triggers logic on each logic component
-        foreach(LogicComponent comp in comps)
+        foreach (LogicComponent comp in comps)
         {
             comp.Logic();
         }
